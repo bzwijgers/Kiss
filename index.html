@@ -28,8 +28,12 @@
 <button type="button" class="btn" id="install" hidden>App installeren</button>
 <p class="help" id="help">Zet de app op je beginscherm: tik in Chrome op de drie puntjes rechtsboven en kies <b>App installeren</b> of <b>Toevoegen aan startscherm</b>.</p>
 <a class="btn ghost" id="go" href="https://claude.ai/artifact/5ezkixSFRAaSSJiygRLam7">Collectie openen</a>
+<a class="btn ghost" id="apk" href="kiss-collection.apk" download hidden>Android-app downloaden</a>
+<p class="help" id="apk-help" hidden>Open het gedownloade bestand en kies <b>Installeren</b>. Vraagt je telefoon om toestemming voor onbekende apps, sta die dan toe voor Chrome.</p>
 <script>
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+  // Android phones get the real app (APK), like Barry's concert agenda.
+  if (/Android/i.test(navigator.userAgent)) { document.getElementById('apk').hidden = false; document.getElementById('apk-help').hidden = false; }
   var standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
   var go = document.getElementById('go');
   if (standalone) {
