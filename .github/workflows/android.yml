@@ -21,11 +21,13 @@ jobs:
         run: gradle --no-daemon assembleRelease
       - name: Zet APK op de website
         run: |
-          cp android/app/build/outputs/apk/release/app-release.apk kiss-collection.apk
+          # Start from the newest main (an earlier build may have added an APK meanwhile), then put this APK on top.
+          cp android/app/build/outputs/apk/release/app-release.apk "$RUNNER_TEMP/kiss-collection.apk"
+          git fetch -q origin main && git checkout -q -B main origin/main
+          cp "$RUNNER_TEMP/kiss-collection.apk" kiss-collection.apk
           git config user.name "kiss-collection-bot"; git config user.email "bot@users.noreply.github.com"
           git add -f kiss-collection.apk
           git diff --cached --quiet || git commit -m "APK bijgewerkt"
-          git pull --rebase -q origin main || true
-          git push
+          git push origin main
       - uses: actions/upload-artifact@v4
         with: { name: apk, path: kiss-collection.apk }
